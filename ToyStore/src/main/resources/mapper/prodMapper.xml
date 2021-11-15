@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.scit.toyworld.dao.ProdMapper">
+
+<insert id="insertProd" parameterType="prod">
+insert into 
+	toy_product(
+		prod_num
+		,prod_name
+		,prod_category
+		,prod_manufacturer
+		,prod_contents
+		,prod_price
+		,prod_stock
+		,prod_boxea
+		,emp_id
+	<if test="prodOriginalFileName != null">
+		,prod_originalfilename
+		,prod_savedfilename
+	</if>
+	)values(
+		#{prodNum}
+		,#{prodName}
+		,#{prodCategory}
+		,#{prodManufacturer}
+		,#{prodContents}
+		,#{prodPrice}
+		,#{prodStock}
+		,#{prodBoxea}
+		,#{empId}
+	<if test="prodOriginalFileName != null">
+		,#{prodOriginalFileName}
+		,#{prodSavedFileName}
+	</if>
+	)
+</insert>
+
+<select id="allList" resultType="hashmap" parameterType="pos">
+select
+	pd.prod_num as prodNum
+	,pd.prod_name as prodName
+	,pd.prod_category as prodCategory
+	,pd.prod_manufacturer as prodManufacturer
+	,pd.prod_contents as prodContents
+	,pd.prod_price as prodPrice
+	,pd.prod_stock as prodStock
+	,pd.prod_boxea as prodBoxea
+	,pd.prod_originalfilename as prodOriginalfilename
+	,pd.prod_savedfilename as prodSavedfilename
+	,to_char(prod_indate, 'YYYY-MM-DD') as proDindate
+	,pd.emp_id as empId
+from
+	toy_product	pd
+<if test="posNum != 0">
+    ,toy_position_info pi
+where
+    pd.prod_num = pi.prod_num
+and
+    pi.pos_num = #{posNum}
+</if>
+</select>
+
+<select id="oneProd" parameterType="String" resultType="prod">
+select
+	prod_num as prodNum
+	,prod_name as prodName
+	,prod_category as prodCategory
+	,prod_manufacturer as prodManufacturer
+	,prod_contents as prodContents
+	,prod_price as prodPrice
+	,prod_stock as prodStock
+	,prod_boxea as prodBoxea
+	,prod_originalfilename as prodOriginalfilename
+	,prod_savedfilename as prodSavedfilename
+	,to_char(prod_indate, 'YYYY-MM-DD') as prodIndate
+	,emp_id as empId
+from
+	toy_product
+where
+	prod_num = #{prodNum}
+</select>
+
+<select id="allPositionNum" resultType="pos">
+select
+	pos_num as posNum
+from
+	toy_position
+</select>
+
+<insert id="RegInfo" parameterType="java.util.List">
+insert into
+	toy_position_info(
+		pos_info_num
+		,pos_num
+		,prod_num
+	)
+	select toy_position_info_seq.nextval, A.* from(
+		<foreach collection="list" item="item" separator="UNION ALL">
+			select #{item.posNum} as posNum
+					,#{item.prodNum} as prodNum
+			from dual
+		</foreach>) A
+</insert>
+
+<select id="search" resultType="pos" parameterType="string">
+select
+	distinct pi.pos_num as posNum
+from
+	toy_product	pd
+    ,toy_position_info pi
+where
+    pd.prod_num = pi.prod_num
+and
+    upper(pd.prod_name) like '%' || upper(trim(#{searchText})) || '%'
+</select>
+
+</mapper>

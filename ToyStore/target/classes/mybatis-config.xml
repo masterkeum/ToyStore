@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.scit.toyworld.vo.EmpVO" alias="emp"/>
+		<typeAlias type="com.scit.toyworld.vo.ProdVO" alias="prod"/>
+		<typeAlias type="com.scit.toyworld.vo.PositionVO" alias="pos"/>
+		<typeAlias type="com.scit.toyworld.vo.InfoVO" alias="info"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="mapper/empMapper.xml"/>
+		<mapper resource="mapper/prodMapper.xml"/>
+	</mappers>
+</configuration>

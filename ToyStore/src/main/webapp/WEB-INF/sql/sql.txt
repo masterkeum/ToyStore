@@ -1,0 +1,43 @@
+drop table toy_employee;
+drop table toy_product;
+drop table toy_position;
+drop table toy_position_info;
+
+create table toy_employee(
+    empid      varchar2(30)    primary key
+    ,emppw     varchar2(30)    not null
+);
+
+create table toy_product(
+    prodnum                 varchar2(30)    primary key
+    ,prodname               varchar2(100)   not null
+    ,prodcategory           varchar2(30)    not null
+    ,prodmanufacturer       varchar2(30)    not null
+    ,prodcontents           varchar2(1000)  
+    ,prodprice              number          default 0
+    ,prodstock              number          default 0
+    ,prodboxquantity        number          default 0
+    ,prodoriginalfilename   varchar2(200)   
+    ,prodsavedfilename      varchar2(200)
+    ,prodindate             date            default sysdate
+    ,empid                  varchar2(30)    references toy_employee(empid)
+);
+
+create table toy_position(
+    positionNum         number          primary key
+);
+
+Begin
+    for i in 1..100
+    loop
+    insert into toy_position (positionNum) values (i);
+    end loop;
+end;
+
+create table toy_position_info(
+    infoNum         number      primary key
+    ,positionNum    number      references toy_position(positionNum)
+    ,prodNum        varchar(30) references toy_product(prodNum)
+);
+
+create sequence toy_position_info_seq;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.scit.toyworld.dao.EmpMapper">
+
+<insert id="join" parameterType="emp">
+insert into
+	toy_employee(
+		emp_id
+		,emp_pw
+		,emp_email
+		,emp_name
+	)values(
+		#{empId}
+		,#{empPw}
+		,#{empEmail}
+		,#{empName}
+	)
+</insert>
+
+<select id="login" parameterType="String" resultType="emp">
+select
+	emp_id as empId
+	,emp_pw as empPw
+	,emp_auth as empAuth
+	,emp_email as empEmail
+	,emp_name as empName
+	,to_char(emp_indate, 'yyyy-MM-dd') as empIndate
+from
+	toy_employee
+where
+	emp_id = #{empId}
+</select>
+
+</mapper>
